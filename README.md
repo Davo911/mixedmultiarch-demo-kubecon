@@ -1,4 +1,4 @@
-# kubecon-multarch-demo
+# mixedmultiarch-demo-kubecon
 
 This demo showcases KubeVirt’s ability to schedule virtual machines to the correct architecture-specific nodes in a heterogeneous OpenShift/Kubernetes cluster.
 
