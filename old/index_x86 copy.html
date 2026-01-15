@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello from x86</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem;
+        font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: linear-gradient(160deg, #fff6f8 0%, #ffe0e7 45%, #ffd1da 100%);
+        color: #4a101c;
+      }
+
+      .content {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.75rem;
+        width: min(540px, 100%);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 6vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .hero-image {
+        width: min(480px, 90vw);
+        border-radius: 1.25rem;
+        display: block;
+      }
+
+      .note {
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(74, 16, 28, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <img
+        src="./x86Server.png"
+        alt="Stylized x86 server illustration"
+        class="hero-image"
+      />
+      <p class="note">Served from x86 Node</p>
+    </div>
+  </body>
+</html>

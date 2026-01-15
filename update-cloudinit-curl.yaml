@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fedora-s390x-cloudinit
+  namespace: default
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    packages:
+      - nginx
+      - curl
+    runcmd:
+      - [bash, -c, "systemctl disable --now firewalld || true"]
+      - [curl, -o, /usr/share/nginx/html/index.html, "http://172.30.178.101/index_s390x.html"]
+      - [systemctl, enable, --now, nginx]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fedora-x86-cloudinit
+  namespace: default
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    packages:
+      - nginx
+      - curl
+    runcmd:
+      - [bash, -c, "systemctl disable --now firewalld || true"]
+      - [curl, -o, /usr/share/nginx/html/index.html, "http://172.30.178.101/index_x86.html"]
+      - [systemctl, enable, --now, nginx]

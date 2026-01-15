@@ -1,0 +1,52 @@
+apiVersion: route.openshift.io/v1
+kind: List
+items:
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: s390x-demo-default
+    namespace: default
+    labels:
+      demo: multiarch
+  spec:
+    host: s390x-demo-default.apps.ocp6.test.mainz
+    to:
+      kind: Service
+      name: svc-s390x
+      weight: 100
+    port:
+      targetPort: http
+    wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: x86-demo-default
+    namespace: default
+    labels:
+      demo: multiarch
+  spec:
+    host: x86-demo-default.apps.ocp6.test.mainz
+    to:
+      kind: Service
+      name: svc-x86
+      weight: 100
+    port:
+      targetPort: http
+    wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: multiarch-demo-default
+    namespace: default
+    labels:
+      app: multiarch-landing
+      demo: multiarch
+  spec:
+    host: multiarch-demo-default.apps.ocp6.test.mainz
+    to:
+      kind: Service
+      name: svc-landing
+      weight: 100
+    port:
+      targetPort: http
+    wildcardPolicy: None

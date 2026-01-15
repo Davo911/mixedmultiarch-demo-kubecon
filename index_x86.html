@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello from x86</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.5rem;
+        font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: linear-gradient(160deg, #fff6f8 0%, #ffe0e7 45%, #ffd1da 100%);
+        color: #4a101c;
+      }
+
+      .content {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.75rem;
+        width: min(540px, 100%);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 6vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .hero-image {
+        width: min(360px, 75vw);
+        border-radius: 1.25rem;
+        display: block;
+      }
+
+      .note {
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(74, 16, 28, 0.6);
+      }
+
+      .result {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: rgba(74, 16, 28, 0.8);
+        min-height: 1.5em;
+      }
+
+      .loading {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 1rem;
+        color: rgba(74, 16, 28, 0.7);
+      }
+
+      .loading span {
+        display: inline-block;
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 50%;
+        background: rgba(74, 16, 28, 0.45);
+        animation: bounce 1s infinite ease-in-out;
+      }
+
+      .loading span:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+
+      .loading span:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes bounce {
+        0%,
+        80%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.6;
+        }
+        40% {
+          transform: translateY(-6px);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <img
+        src="https://davo911.github.io/x86Server.png"
+        alt="Stylized x86 server illustration"
+        class="hero-image"
+      />
+      <p class="note">Served from x86 Node: compute-1.ocp6.test.mainz</p>
+      <img
+        src="https://placekittens.com/300/200"
+        alt="A curious cat looking at the camera"
+        width="300"
+        height="200"
+        style="border-radius: 1rem; box-shadow: 0 12px 30px rgba(74, 16, 28, 0.18);"
+      />
+      <p id="result" class="result">
+        <span class="loading" aria-live="polite" aria-busy="true">
+          Running inference
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </p>
+    </div>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        const resultEl = document.getElementById('result');
+
+        setTimeout(() => {
+          resultEl.innerHTML = "It's a cat! (Confidence: 98%)";
+          resultEl.setAttribute('aria-live', 'polite');
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>

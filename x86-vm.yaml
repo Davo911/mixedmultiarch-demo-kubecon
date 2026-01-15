@@ -1,0 +1,48 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: fedora-x86
+  namespace: default
+  labels:
+    app: fedora-x86
+    demo: multiarch
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        app: fedora-x86
+        demo: multiarch
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: compute-1.ocp6.test.mainz
+      terminationGracePeriodSeconds: 0
+      domain:
+        cpu:
+          cores: 2
+        resources:
+          requests:
+            memory: 2Gi
+        devices:
+          disks:
+          - name: containerdisk
+            disk: {}
+          - name: cloudinitdisk
+            disk: {}
+          interfaces:
+          - name: default
+            masquerade: {}
+            ports:
+            - name: http
+              port: 80
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: quay.io/containerdisks/fedora:latest
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          secretRef:
+            name: fedora-x86-cloudinit

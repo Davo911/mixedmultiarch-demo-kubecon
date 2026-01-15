@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-html-files
+  namespace: default
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: copier
+        image: registry.access.redhat.com/ubi9/ubi:latest
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          dnf install -y openssh-clients sshpass
+          echo "Copying files to VMs..."
+          sshpass -p 'fedora' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /html/index_s390x.html fedora@10.130.0.125:/tmp/index.html
+          sshpass -p 'fedora' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null fedora@10.130.0.125 'sudo cp /tmp/index.html /usr/share/nginx/html/ && sudo systemctl restart nginx'
+          echo "✓ s390x VM updated"
+          sshpass -p 'fedora' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /html/index_x86.html fedora@10.130.2.64:/tmp/index.html
+          sshpass -p 'fedora' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null fedora@10.130.2.64 'sudo cp /tmp/index.html /usr/share/nginx/html/ && sudo systemctl restart nginx'
+          echo "✓ x86 VM updated"
+        volumeMounts:
+        - name: html-files
+          mountPath: /html
+      volumes:
+      - name: html-files
+        configMap:
+          name: vm-html-files

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiarch-landing
+  namespace: default
+  labels:
+    app: multiarch-landing
+    demo: multiarch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multiarch-landing
+  template:
+    metadata:
+      labels:
+        app: multiarch-landing
+        demo: multiarch
+    spec:
+      containers:
+      - name: nginx
+        image: registry.redhat.io/ubi9/nginx-120:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: site
+          mountPath: /opt/app-root/src
+      volumes:
+      - name: site
+        configMap:
+          name: multiarch-landing

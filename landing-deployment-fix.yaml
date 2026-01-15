@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiarch-landing
+  namespace: default
+  labels:
+    app: multiarch-landing
+    demo: multiarch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multiarch-landing
+  template:
+    metadata:
+      labels:
+        app: multiarch-landing
+        demo: multiarch
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: site
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: site
+        configMap:
+          name: multiarch-landing

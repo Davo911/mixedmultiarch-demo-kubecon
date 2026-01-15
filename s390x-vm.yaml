@@ -1,0 +1,49 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: fedora-s390x
+  namespace: default
+  labels:
+    app: fedora-s390x
+    demo: multiarch
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        app: fedora-s390x
+        demo: multiarch
+    spec:
+      architecture: s390x
+      nodeSelector:
+        kubernetes.io/arch: s390x
+      terminationGracePeriodSeconds: 0
+      domain:
+        cpu:
+          cores: 2
+        resources:
+          requests:
+            memory: 2Gi
+        devices:
+          disks:
+          - name: containerdisk
+            disk: {}
+          - name: cloudinitdisk
+            disk: {}
+          interfaces:
+          - name: default
+            masquerade: {}
+            ports:
+            - name: http
+              port: 80
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: quay.io/containerdisks/fedora:latest
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          secretRef:
+            name: fedora-s390x-cloudinit

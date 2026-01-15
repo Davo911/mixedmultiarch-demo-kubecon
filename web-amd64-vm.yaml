@@ -1,0 +1,74 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: web-amd64
+  namespace: default
+  labels:
+    app: web-amd64
+    arch: amd64
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: web-amd64
+        app: web-amd64
+        arch: amd64
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: compute-1.ocp6.test.mainz
+      domain:
+        cpu:
+          sockets: 1
+          cores: 2
+          threads: 1
+        resources:
+          requests:
+            memory: 2Gi
+        devices:
+          disks:
+          - name: containerdisk
+            disk:
+              bus: virtio
+          - name: cloudinitdisk
+            disk:
+              bus: virtio
+          interfaces:
+          - name: default
+            masquerade: {}
+            ports:
+            - name: http
+              port: 80
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: quay.io/containerdisks/fedora:latest
+          imagePullPolicy: IfNotPresent
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+            #cloud-config
+            hostname: web-amd64
+            users:
+              - name: fedora
+                lock_passwd: false
+                passwd: "$6$rounds=4096$7b5gG6Y6$8kYx0zjH7s2v3aEDWQ3eQWf0uW1oK8g6yC6b7g8h9iJkLmNoPq"  # password 'fedora' (not critical for demo)
+            write_files:
+              - path: /usr/share/nginx/html/index.html
+                permissions: '0644'
+                owner: root:root
+                content: |
+                  <!doctype html>
+                  <html><head><title>Web on x86</title></head>
+                  <body>
+                  <h1>Greeting from an x86_64 machine</h1>
+                  <p>Hostname: {{ ds.meta_data.hostname }}</p>
+                  <p>Arch (from uname): $(uname -m)</p>
+                  </body></html>
+            runcmd:
+              - [ sh, -c, 'dnf -y install nginx' ]
+              - [ sh, -c, 'systemctl disable --now firewalld || true' ]
+              - [ sh, -c, 'systemctl enable --now nginx' ]
